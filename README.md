@@ -203,3 +203,4 @@ curl -X POST http://localhost:3000/approve-version \
 - Version storage is in `market-service/versions.json` for simple persistence.
 
 ci test
+cd test
