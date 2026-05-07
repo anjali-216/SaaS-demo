@@ -202,3 +202,4 @@ curl -X POST http://localhost:3000/approve-version \
 - `web-ui` reads the API base URL from `MARKET_SERVICE_URL` (default `http://localhost:3000`).
 - Version storage is in `market-service/versions.json` for simple persistence.
 
+ci test
