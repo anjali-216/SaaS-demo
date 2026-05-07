@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SaaS Demo — Products</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        margin: 24px;
+        max-width: 900px;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: end;
+      }
+      label {
+        display: grid;
+        gap: 6px;
+      }
+      input {
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        min-width: 220px;
+      }
+      button {
+        padding: 10px 14px;
+        border: 0;
+        border-radius: 8px;
+        background: #111827;
+        color: white;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .card {
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 14px;
+        margin-top: 16px;
+      }
+      .muted {
+        color: #6b7280;
+        font-size: 14px;
+      }
+      ul {
+        padding-left: 18px;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+      .error {
+        color: #b91c1c;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Products</h2>
+    <div class="muted">
+      API: <code id="apiUrl">loading...</code>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <label>
+          Name
+          <input id="name" placeholder="Banana" />
+        </label>
+        <label>
+          Price
+          <input id="price" placeholder="2.50" inputmode="decimal" />
+        </label>
+        <button id="addBtn">Add product</button>
+        <button id="refreshBtn" style="background: #374151">Refresh</button>
+      </div>
+      <div id="status" class="muted" style="margin-top: 10px"></div>
+      <div id="error" class="error" style="margin-top: 10px"></div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content: space-between">
+        <div class="muted">List</div>
+        <div class="muted">Tip: try adding a product, then refresh.</div>
+      </div>
+      <ul id="list"></ul>
+    </div>
+
+    <script src="/config.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  repository_dispatch:
+    types: [deploy]
+
+jobs:
+  deploy-to-server:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.event.client_payload.version }}
+      OWNER: ${{ github.repository_owner }}
+    steps:
+      - name: Validate payload
+        run: |
+          if [ -z "$VERSION" ]; then
+            echo "Missing client_payload.version"
+            exit 1
+          fi
+          echo "Deploying version $VERSION"
+
+      - name: SSH deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+            VERSION="${{ env.VERSION }}"
+            OWNER="${{ env.OWNER }}"
+            IMAGE_API="ghcr.io/${OWNER}/saas-demo-market-service:${VERSION}"
+            IMAGE_UI="ghcr.io/${OWNER}/saas-demo-web-ui:${VERSION}"
+
+            docker login ghcr.io -u "${{ secrets.REGISTRY_USERNAME }}" -p "${{ secrets.REGISTRY_TOKEN }}"
+            docker network create saas-demo-net || true
+
+            docker pull "$IMAGE_API"
+            docker pull "$IMAGE_UI"
+
+            docker rm -f market-service || true
+            docker rm -f web-ui || true
+
+            docker run -d --name market-service --network saas-demo-net -p 3000:3000 "$IMAGE_API"
+            docker run -d --name web-ui --network saas-demo-net -p 3001:3001 -e MARKET_SERVICE_URL=http://market-service:3000 "$IMAGE_UI"

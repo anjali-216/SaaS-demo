@@ -1,0 +1,21 @@
+services:
+  market-service:
+    build:
+      context: ./market-service
+    container_name: demo-market-service
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  web-ui:
+    build:
+      context: ./web-ui
+    container_name: demo-web-ui
+    environment:
+      MARKET_SERVICE_URL: http://localhost:3000
+    ports:
+      - "3001:3001"
+    depends_on:
+      - market-service
+    restart: unless-stopped
+
